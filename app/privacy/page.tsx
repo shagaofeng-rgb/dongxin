@@ -1,0 +1,3 @@
+import type {Metadata} from "next";
+export const metadata:Metadata={title:"Privacy"};
+export default function PrivacyPage(){return <section className="article-page"><div className="article-inner"><h1 className="blog-title">Privacy</h1><h2>Local website preview</h2><p>The inquiry and newsletter forms in this local preview do not send or store the information entered. No analytics, marketing pixels, third-party chat services or external form endpoints have been added.</p><h2>Before publication</h2><p>Configure your company contact information and publish an approved privacy policy that reflects the services you choose to connect.</p></div></section>;}

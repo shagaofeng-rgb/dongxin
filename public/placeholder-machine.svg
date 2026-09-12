@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title description">
+  <title id="title">Dongxin Machinery visual placeholder</title>
+  <desc id="description">Replace this placeholder with a Dongxin-owned product, factory or application image.</desc>
+  <rect width="1200" height="900" fill="#d9e2e5"/>
+  <path d="M0 700 260 485 512 650 720 390 1200 650V900H0Z" fill="#9aafb5"/>
+  <g fill="none" stroke="#17384d" stroke-width="22"><circle cx="600" cy="410" r="180"/><path d="M600 130v90M600 600v90M320 410h90M790 410h90M402 212l64 64M734 544l64 64M798 212l-64 64M466 544l-64 64"/></g>
+  <rect x="384" y="360" width="432" height="100" rx="12" fill="#f5f7f6"/><text x="600" y="425" text-anchor="middle" font-family="Arial, sans-serif" font-size="32" font-weight="700" fill="#17384d">REPLACE WITH OWNED VISUAL</text>
+</svg>

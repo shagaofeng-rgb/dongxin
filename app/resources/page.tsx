@@ -1,0 +1,8 @@
+import type {Metadata} from "next";
+import Link from "next/link";
+import {products} from "@/lib/catalogue";
+import {Media,ResourceCard,PromoRow} from "@/components/site-blocks";
+import {AttachmentButton} from "@/components/site-widgets";
+import {Icon} from "@/components/site-icon";
+export const metadata:Metadata={title:"Videos & Resources"};
+export default function ResourcesPage(){return <div className="shell"><h1 className="page-heading">Videos & Resources</h1><section className="resource-feature"><div className="resource-video"><Media src="/media/rotor-01.webp" alt="Rotary valve component"/><AttachmentButton className="video-play" name="Product video"><Icon name="play"/></AttachmentButton></div><div className="resource-feature-copy"><span>FEATURED</span><h2>Explore how rotary valve components work</h2><p>Browse component guides and application resources to understand the equipment in your production line.</p><Link className="button button-blue button-small" href="/resources/videos">See all videos <Icon name="right"/></Link></div></section><div className="resource-sections">{[["Datasheets","Datasheet","downloads"],["Technical Drawings","Technical Drawing","technical-drawings"],["Literature","Brochure","downloads"]].map(([title,type,slug])=><section className="resource-row" key={title}><h2>{title}</h2><div className="resource-cards">{products.slice(type==="Brochure"?9:1,type==="Brochure"?13:5).map(p=><ResourceCard title={p.name} type={type} key={p.slug}/>)}</div><Link className="button button-blue button-small" href={`/resources/${slug}`}>See all {title} <Icon name="right"/></Link></section>)}</div><PromoRow/></div>;}
