@@ -7,6 +7,14 @@ Source URL is in the task conversation; it is not embedded in production code.
 
 final result: blocked
 
+## 2026-09-12 visual-system implementation
+
+The approved Precision Industrial system is now implemented across the shared header, footer, product cards, product-detail template, catalogue, industry, resource, support, quote, contact, model and sizing template styles. It uses an ink, engineering-blue, steel and safety-orange system; a 1280px content grid; technical bordered surfaces; a static conversion-led home hero; and responsive rules for the compact mobile header and template content.
+
+- Current local HTTP checks returned 200 with an H1 for home, catalogue, product detail, industry, options, resources, about, blog, support, quote, contact, models and sizing.
+- TypeScript and a new production build passed after the redesign, with 83 route entries generated.
+- The current browser bridge failed to enumerate a browser (`nodeRepl.fetch request failed`), so a new screenshot comparison cannot be claimed. This is the remaining visual QA gate, not a build or route failure.
+
 The previous browser connection failure is resolved. This status now means the **all-page 1:1 completion gate is not satisfied**, not that the local site cannot run. The work should be presented as a progress preview, not a completed clone.
 
 ## Evidence

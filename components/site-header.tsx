@@ -16,11 +16,10 @@ const navigation=[
 export function SiteHeader(){
  const path=usePathname();
  const [submenu,setSubmenu]=useState<string|null>(null);
- const [menu,setMenu]=useState(false),[search,setSearch]=useState(false),[compact,setCompact]=useState(false),[contrast,setContrast]=useState(false);
- useEffect(()=>{const onScroll=()=>setCompact(window.scrollY>90);onScroll();window.addEventListener("scroll",onScroll,{passive:true});return()=>window.removeEventListener("scroll",onScroll);},[]);
+ const [menu,setMenu]=useState(false),[search,setSearch]=useState(false),[contrast,setContrast]=useState(false);
  useEffect(()=>{document.documentElement.classList.toggle("high-contrast",contrast);},[contrast]);
  function close(){setMenu(false);setSearch(false);setSubmenu(null);}
- return <><a className="skip-link" href="#main-content">Skip to main content</a><header className={`site-header ${compact?"is-compact":""}`} onKeyDown={e=>{if(e.key==="Escape")close();}}>
+ return <><a className="skip-link" href="#main-content">Skip to main content</a><header className="site-header" onKeyDown={e=>{if(e.key==="Escape")close();}}>
  <Link href="/" className="brand" aria-label={`${brand.name} home`} onClick={close}><strong>{brand.shortName}</strong><span>{brand.descriptor}</span></Link>
  <nav className="utility-nav" aria-label="Site tools"><button aria-label="Toggle high contrast" aria-pressed={contrast} onClick={()=>setContrast(!contrast)}><Icon name="contrast"/></button><Link href="/contact/representatives" onClick={close}>Locate a Rep</Link><Link href="/quote" onClick={close}>Request a Quote</Link><Link href="/contact" onClick={close}>Contact Us</Link><Link className="utility-contact" href="/contact" onClick={close}><Icon name="phone"/> TALK TO OUR TEAM</Link></nav>
  <div className="header-actions"><Link className="mobile-contact" href="/contact" aria-label="Contact our team" onClick={close}><Icon name="phone"/></Link><button className="search-toggle" aria-label="Open search" aria-expanded={search} aria-controls="header-search" onClick={()=>{setSearch(!search);setMenu(false);}}><Icon name={search?"close":"search"}/></button><button className="menu-toggle" aria-label={menu?"Close navigation":"Open navigation"} aria-expanded={menu} aria-controls="main-navigation" onClick={()=>{setMenu(!menu);setSearch(false);}}><Icon name={menu?"close":"menu"}/></button></div>
