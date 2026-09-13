@@ -123,3 +123,34 @@ Authenticate GitHub on this host, or switch the remote to an authorized SSH URL.
 - Reproducible: yes
 - Related files: .git/config
 - Tags: git, github, credentials, deploy
+
+## [ERR-20260913-005] transient-browser-debugger-sync
+
+**Logged**: 2026-09-13T18:42:00+08:00
+**Priority**: low
+**Status**: resolved
+**Area**: browser
+
+### Summary
+The first production desktop navigation click timed out while the browser debugger synchronized after a viewport change and reload.
+
+### Error
+```text
+Timed out waiting for debugger synchronization for tab 6
+```
+
+### Context
+- Task attempted: Open the production Valves mega menu at 1440 × 1000.
+- Command/tool/API: in-app Browser role locator click.
+- Inputs: Freshly reloaded production tab immediately after resizing.
+
+### Suspected Cause
+The click raced the browser debugger's post-reload synchronization.
+
+### Suggested Fix
+Request a DOM snapshot and add a short stabilization wait before retrying the interaction. The retry succeeded.
+
+### Metadata
+- Reproducible: unknown
+- Related files: design-qa.md
+- Tags: browser, debugger, timing, verification
