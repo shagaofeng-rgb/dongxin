@@ -61,3 +61,51 @@ The previous browser connection failure is resolved. This status now means the *
 ## Final build
 
 Final next build passed: compiled successfully, TypeScript passed, 83 generated build entries. The sitemap contains 79 canonical content routes. No all-page fidelity pass is claimed.
+
+---
+
+## Navigation mega-menu QA — 2026-09-13
+
+### Visual truth
+
+- Reference: `https://acsvalves.com/`
+- Implementation: `http://localhost:4173/`
+- Capture method: Codex in-app Browser screenshots and DOM measurements retained as conversation artifacts.
+- Desktop viewport: 1440 × 1000 CSS pixels, device pixel ratio 1.
+- Mobile viewport: 390 × 844 CSS pixels.
+
+### Surfaces compared
+
+- Header height and compact sticky state.
+- All seven primary navigation items and every hover/focus mega-menu state.
+- Full-width 500 px desktop panel, three-column grid, borders, shadows, icon calls-to-action, link groups, and featured cards.
+- Wide four-card layouts for the 3D gallery and blog.
+- Mobile menu rows, accordion expansion, call-to-action treatment, icon grid, link underlines, and horizontal overflow.
+- Typography, spacing, colors, imagery, transitions, and active states.
+
+### Interaction and accessibility checks
+
+- Hover and keyboard focus expose the corresponding desktop menu.
+- Escape closes menus; route changes close menus and search.
+- Mobile accordions open one at a time; View in 3D remains a direct link.
+- No horizontal overflow at 390 px.
+- Fresh-page browser console check returned no warnings or errors.
+- Final TypeScript and production build checks passed after the last spacing adjustment.
+
+### Comparison history
+
+1. First mobile comparison found an unfilled all-products call-to-action, an industry-order mismatch, and secondary links without source-style underlines.
+2. The call-to-action, industry ordering, link treatment, and vertical rhythm were corrected.
+3. Final desktop geometry measured 1440 × 500 px for the open panel with three equal 466.66 px content columns and 20 px outer gutters.
+
+### Intentional differences
+
+- Dongxin branding, page routes, copy, and owned product images replace ACS branding and materials.
+- Montserrat is used as the closest already licensed project typeface instead of ACS's proprietary Gotham webfont.
+- Content labels are mapped to pages that exist on the Dongxin site so every navigation target remains functional.
+
+### Navigation result
+
+`passed`
+
+No P0, P1, or P2 navigation issues remain. Minor P3 differences are limited to the intentional font/content substitutions above and natural image-aspect-ratio differences in Dongxin-owned assets. This navigation-specific pass does not change the all-page completion gate documented above.
