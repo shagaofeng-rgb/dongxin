@@ -109,3 +109,55 @@ Final next build passed: compiled successfully, TypeScript passed, 83 generated 
 `passed`
 
 No P0, P1, or P2 navigation issues remain. Minor P3 differences are limited to the intentional font/content substitutions above and natural image-aspect-ratio differences in Dongxin-owned assets. This navigation-specific pass does not change the all-page completion gate documented above.
+
+---
+
+## Homepage layout and responsive QA — 2026-09-13
+
+### Scope and visual evidence
+
+- Source visual truth: `https://acsvalves.com/` captured in the Codex in-app Browser.
+- Implementation: `http://localhost:4173/` captured in the same Browser session.
+- Source and implementation screenshots were emitted together for direct desktop and mobile comparison in the task's browser-capture history.
+- Desktop state: homepage initial carousel slide at 1440 CSS px wide; device scale factor 1.
+- Mobile state: homepage initial and Latest Blog carousel slides at 390 × 844 CSS px; device scale factor 1.
+- Screenshots are browser-capture conversation artifacts rather than exported local image files; no density normalization was needed because both sides used the same CSS viewport and density.
+
+### Comparison passes
+
+- Full-view desktop: header, full-bleed hero, search, industry filter/cards, Product Finder, dark configuration stage, blue Multi-Port stage, editorial trio, tool rows, sizing section, mixer promotion, newsletter, and footer.
+- Full-view mobile: utility header, hero carousel, search, wrapped industry filter, horizontally scrollable cards, Product Finder, content-order changes, and fixed-height graphic regions.
+- Focused comparison: desktop hero and Product Finder; mobile hero initial slide, Latest Blog slide, and Food industry selected state.
+
+### Findings and fixes
+
+- [P1, fixed] Dark heading tokens from the site-wide typography layer overrode white headings in the new hero and Product Finder sections.
+  - Fix: scoped white heading colors to the dark homepage surfaces in `app/globals.css`.
+  - Post-fix evidence: desktop hero and Product Finder captures show readable white display type matching the reference hierarchy.
+- [P2, fixed] The mobile industry section initially used a single hidden card rather than the reference's peekable horizontal carousel.
+  - Fix: converted the mobile card row to a scroll-snapping, overflow-safe horizontal rail.
+  - Post-fix evidence: the Food selected capture shows the active tab and adjacent Pet Food card while document width remains 390 px.
+
+### Fidelity surfaces
+
+- Fonts and typography: Montserrat is the installed, licensed project face; display scales, weight, centered mobile hero wrapping, and small uppercase labels follow the reference. Gotham remains an intentional unavailable-font substitution.
+- Spacing and layout rhythm: full-bleed desktop bands, 20 px desktop side rhythm, 390 px mobile gutters, large dark Product Finder panel, editorial grid, and stacked mobile sections were measured against reference captures.
+- Colors and tokens: Dongxin blue/orange/yellow tokens map to the reference's blue/orange/yellow hierarchy; dark image overlays preserve white-text contrast.
+- Image quality: only existing Dongxin-owned product, workshop, and industry assets are used; no ACS images, logos, or hotlinks are present. Product-image aspect ratios intentionally differ from the source assets.
+- Copy and content: all routes and content remain Dongxin-specific while retaining the source page's information architecture and CTA placement.
+- Icons and interactions: installed icon font is used for controls, product/industry marks, hero pause, carousel, search, and responsive navigation.
+
+### Functional and responsive checks
+
+- Hero carousel: Latest Blog selection updates `aria-pressed` to `true` and swaps the image/copy.
+- Industry switcher: Food selection works at 390 px and updates the active state/content.
+- Mobile layout: `documentElement.scrollWidth` = `clientWidth` = 390 px.
+- Existing mobile primary navigation, desktop mega-menu, search form, and newsletter form remain functional.
+- TypeScript and production builds pass after the homepage changes.
+
+### Residual P3 notes
+
+- Source uses ACS-owned photography, Gotham type, and a live reCAPTCHA; Dongxin uses its own assets, Montserrat, and an explicitly non-submitting newsletter preview.
+- The reference's exact media crops therefore differ intentionally; layout, hierarchy, responsive order, and interaction model are matched.
+
+final result: passed
