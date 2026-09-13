@@ -557,3 +557,69 @@ Use a task-specific variable such as `http_code`.
 - Reproducible: yes
 - Related files: app/[...legacy]/page.tsx
 - Tags: shell, qa, zsh
+
+## [ERR-20260913-019] npx-unavailable-in-bundled-runtime
+
+**Logged**: 2026-09-13T20:20:00+08:00
+**Priority**: low
+**Status**: resolved
+**Area**: deployment
+
+### Summary
+The bundled Node runtime provides `node` but does not expose the `npx` shim used for a Vercel deployment-status query.
+
+### Error
+```text
+zsh: command not found: npx
+```
+
+### Context
+- Task attempted: Check the automatic Vercel deployment after pushing `main`.
+- Command/tool/API: `npx vercel ls`.
+- Inputs: linked `dongxin` project.
+
+### Suspected Cause
+The application runtime PATH is intentionally minimal.
+
+### Suggested Fix
+Use the project package manager's executable runner when available, or verify the public production routes directly.
+
+### Metadata
+- Reproducible: yes
+- Related files: .vercel/project.json
+- Tags: deployment, node, vercel
+
+## [ERR-20260913-020] production-deploy-not-yet-propagated
+
+**Logged**: 2026-09-13T20:21:00+08:00
+**Priority**: low
+**Status**: resolved
+**Area**: deployment
+
+### Summary
+The production domain still returned 404 for newly added routes immediately after the branch push.
+
+### Error
+```text
+https://qzdxrv.com/careers -> 404
+https://qzdxrv.com/compliance -> 404
+```
+
+### Context
+- Task attempted: Confirm public deployment of commit `c3281df`.
+- Command/tool/API: direct production HTTP requests.
+- Inputs: four newly added canonical and legacy routes.
+
+### Suspected Cause
+The linked production deployment had not completed or propagated to the public alias.
+
+### Suggested Fix
+Wait briefly and retry direct production checks; use a confirmed deployment URL if the alias remains stale.
+
+### Resolution
+After propagation, all four checks returned HTTP 200. The legacy bulk-material URL followed its redirect to the corresponding Dongxin product catalogue.
+
+### Metadata
+- Reproducible: pending
+- Related files: app/careers/page.tsx, app/compliance/page.tsx
+- Tags: deployment, propagation, vercel
