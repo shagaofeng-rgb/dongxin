@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import {useEffect,useState} from "react";
+import {useEffect,useRef,useState} from "react";
 import {usePathname} from "next/navigation";
 import {brand,industries} from "@/lib/catalogue";
 import {Icon} from "./site-icon";
@@ -179,15 +179,20 @@ export function SiteHeader(){
  const path=usePathname();
  const [submenu,setSubmenu]=useState<string|null>(null);
  const [menu,setMenu]=useState(false),[search,setSearch]=useState(false),[compact,setCompact]=useState(false),[contrast,setContrast]=useState(false);
+ const headerRef=useRef<HTMLElement>(null);
  useEffect(()=>{const onScroll=()=>setCompact(window.scrollY>90);onScroll();window.addEventListener("scroll",onScroll,{passive:true});return()=>window.removeEventListener("scroll",onScroll);},[]);
  useEffect(()=>{document.documentElement.classList.toggle("high-contrast",contrast);return()=>document.documentElement.classList.remove("high-contrast");},[contrast]);
  useEffect(()=>{setMenu(false);setSearch(false);setSubmenu(null);},[path]);
+ useEffect(()=>{const closeOutside=(event:PointerEvent)=>{if(headerRef.current&&!headerRef.current.contains(event.target as Node))close();};document.addEventListener("pointerdown",closeOutside);return()=>document.removeEventListener("pointerdown",closeOutside);},[]);
  function close(){setMenu(false);setSearch(false);setSubmenu(null);}
- return <><a className="skip-link" href="#main-content">Skip to main content</a><header className={`site-header ${compact?"is-compact":""}`} onKeyDown={event=>{if(event.key==="Escape")close();}}>
+ function isDesktop(){return typeof window!=="undefined"&&window.matchMedia("(min-width: 801px)").matches;}
+ function openDesktopSubmenu(key:string){if(isDesktop())setSubmenu(key);}
+ function closeDesktopSubmenu(){if(isDesktop())setSubmenu(null);}
+ return <><a className="skip-link" href="#main-content">Skip to main content</a><header ref={headerRef} className={`site-header ${compact?"is-compact":""}`} onKeyDown={event=>{if(event.key==="Escape")close();}}>
   <Link href="/" className="brand" aria-label={`${brand.name} home`} onClick={close}><strong>{brand.shortName}</strong><span>{brand.descriptor}</span></Link>
   <nav className="utility-nav" aria-label="Site tools"><button aria-label="Toggle high contrast" aria-pressed={contrast} onClick={()=>setContrast(!contrast)}><Icon name="contrast"/></button><Link href="/contact/representatives" onClick={close}>Locate a Rep</Link><Link href="/quote" onClick={close}>Request a Quote</Link><Link href="/contact" onClick={close}>Contact Us</Link><Link className="utility-contact" href="/contact" onClick={close}><Icon name="phone"/> TALK TO OUR TEAM</Link></nav>
-  <div className="header-actions"><Link className="mobile-contact" href="/contact" aria-label="Contact our team" onClick={close}><Icon name="phone"/></Link><button className="search-toggle" aria-label="Open search" aria-expanded={search} aria-controls="header-search" onClick={()=>{setSearch(!search);setMenu(false);}}><Icon name={search?"close":"search"}/></button><button className="menu-toggle" aria-label={menu?"Close navigation":"Open navigation"} aria-expanded={menu} aria-controls="main-navigation" onClick={()=>{setMenu(!menu);setSearch(false);setSubmenu(null);}}><Icon name={menu?"close":"menu"}/></button></div>
-  <nav id="main-navigation" className={`primary-nav ${menu?"is-open":""}`} aria-label="Main navigation">{navigation.map(item=><div className={`nav-item nav-item-${item.key} ${submenu===item.key?"submenu-open":""} ${item.mobileDirect?"nav-item-mobile-direct":""}`} key={item.key}><Link href={item.href} onClick={close} className={path.startsWith(item.href)?"active":""}><span className="nav-label">{item.label}</span></Link>{!item.mobileDirect?<button className="nav-submenu-toggle" aria-label={`Toggle ${item.label} submenu`} aria-expanded={submenu===item.key} aria-controls={`submenu-${item.key}`} onClick={()=>setSubmenu(submenu===item.key?null:item.key)}><Icon name="down"/></button>:null}{!item.mobileDirect?<div className="nav-dropdown" id={`submenu-${item.key}`}><MegaMenu item={item} close={close}/></div>:null}</div>)}</nav>
+  <div className="header-actions"><Link className="mobile-contact" href="/contact" aria-label="Contact our team" onClick={close}><Icon name="phone"/></Link><button className="search-toggle" aria-label="Open search" aria-expanded={search} aria-controls="header-search" onClick={()=>{setSearch(!search);setMenu(false);setSubmenu(null);}}><Icon name={search?"close":"search"}/></button><button className="menu-toggle" aria-label={menu?"Close navigation":"Open navigation"} aria-expanded={menu} aria-controls="main-navigation" onClick={()=>{setMenu(!menu);setSearch(false);setSubmenu(null);}}><Icon name={menu?"close":"menu"}/></button></div>
+  <nav id="main-navigation" className={`primary-nav ${menu?"is-open":""}`} aria-label="Main navigation">{navigation.map(item=><div className={`nav-item nav-item-${item.key} ${submenu===item.key?"submenu-open":""} ${item.mobileDirect?"nav-item-mobile-direct":""}`} key={item.key} onMouseEnter={()=>{if(!item.mobileDirect)openDesktopSubmenu(item.key);}} onMouseLeave={closeDesktopSubmenu} onFocusCapture={()=>{if(!item.mobileDirect)openDesktopSubmenu(item.key);}} onBlurCapture={event=>{if(!item.mobileDirect&&isDesktop()&&!event.currentTarget.contains(event.relatedTarget as Node))setSubmenu(null);}}><Link href={item.href} onClick={close} className={path.startsWith(item.href)?"active":""} aria-haspopup={item.mobileDirect?undefined:"menu"} aria-expanded={item.mobileDirect?undefined:submenu===item.key}><span className="nav-label">{item.label}</span></Link>{!item.mobileDirect?<button className="nav-submenu-toggle" aria-label={`Toggle ${item.label} submenu`} aria-expanded={submenu===item.key} aria-controls={`submenu-${item.key}`} onClick={()=>setSubmenu(submenu===item.key?null:item.key)}><Icon name="down"/></button>:null}{!item.mobileDirect?<div className="nav-dropdown" id={`submenu-${item.key}`}><MegaMenu item={item} close={close}/></div>:null}</div>)}</nav>
   {search?<form id="header-search" className="header-search" action="/products" onSubmit={close}><label className="sr-only" htmlFor="global-search">Search the product catalogue</label><input id="global-search" name="q" type="search" placeholder="Search valves, options and resources" autoFocus/><button className="button" type="submit"><Icon name="search"/> Search</button></form>:null}
  </header></>;
 }
