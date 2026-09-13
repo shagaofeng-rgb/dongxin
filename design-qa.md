@@ -161,3 +161,35 @@ No P0, P1, or P2 navigation issues remain. Minor P3 differences are limited to t
 - The reference's exact media crops therefore differ intentionally; layout, hierarchy, responsive order, and interaction model are matched.
 
 final result: passed
+
+---
+
+## Secondary-page template and route QA — 2026-09-13
+
+### Scope
+
+- Reference route families captured from the public ACS sitemap: catalogue/detail, option/detail, industry, resource, blog/article, support, contact/quote, sizing, company information, careers, and compliance.
+- Dongxin implementation reviewed at `http://localhost:4173/`; original manufacturer marks, staff, claims, copy, media, contact data, and downloadable files are not used.
+- New Dongxin company-information templates: `/careers`, `/compliance`, `/about/accessibility`, `/about/industry-associations`, and `/about/trade-associations`.
+
+### Responsive and interaction evidence
+
+- Reference product listing was captured at desktop 1440 × 1000 and mobile 390 × 844 in the Codex in-app Browser.
+- Local careers template was captured at desktop and mobile 390 × 844. The mobile accessibility tree exposes the compact header controls (search and navigation) rather than the desktop primary-navigation links.
+- Existing product filtering, option/resource tabs, blog topic links, support categories, contact/quote forms, sizing tool, mobile navigation, and desktop mega-navigation retain their previously verified interactive states.
+- The shared secondary-page template uses a two-column desktop hero, three-card editorial grid, hover elevation, image overlay, and single-column mobile collapse at 800 px and below.
+
+### Route coverage checks
+
+- `pnpm typecheck` passed.
+- `pnpm build` passed; 88 static build entries were generated.
+- Canonical checks returned 200 for products, product detail, options, option detail, 3D gallery, about, company subpage, careers, compliance, resources, video resources, blog, article detail, support, contact, quote, and sizing.
+- Reference-style deep links are safely redirected to the appropriate Dongxin route: product system/detail, resource/video/file, blog article/archive, support, recruitment, compliance, and campaign-family URLs.
+
+### Intentional substitutions
+
+- Dongxin-owned local media, project typography and neutral editorial copy are used in all source-derived layout slots.
+- Employment, association, accessibility, compliance, certification, product-rating and document-download facts remain clearly marked as approval-dependent until Dongxin provides verified content.
+- This QA verifies the shared layout system, responsive behavior and functional route coverage. It does not assert ACS company claims or reproduce ACS editorial/archive content.
+
+final result: passed

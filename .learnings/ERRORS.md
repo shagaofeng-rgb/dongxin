@@ -340,3 +340,220 @@ Use a valid object literal and re-run the poll; the build completed successfully
 - Reproducible: no
 - Related files: package.json
 - Tags: tooling, syntax, build
+
+## [ERR-20260913-012] sitemap-inventory-command-timeout
+
+**Logged**: 2026-09-13T19:48:00+08:00
+**Priority**: low
+**Status**: resolved
+**Area**: research
+
+### Summary
+The first full sitemap inventory fetched every section serially and exceeded the command time limit.
+
+### Error
+```text
+Command timed out after 30 seconds
+```
+
+### Context
+- Task attempted: Build a reference-site route inventory.
+- Command/tool/API: shell `curl` loop.
+- Inputs: 33 ACS XML section sitemaps.
+
+### Suspected Cause
+Each sitemap was allowed a 30-second network timeout, so a slow section could block the entire serial loop.
+
+### Suggested Fix
+Fetch the section sitemaps concurrently with a short per-request timeout, then deduplicate the URLs.
+
+### Metadata
+- Reproducible: yes
+- Related files: design-qa.md
+- Tags: research, sitemap, timeout
+
+## [ERR-20260913-013] cua-accessibility-tree-method-unavailable
+
+**Logged**: 2026-09-13T19:54:00+08:00
+**Priority**: low
+**Status**: resolved
+**Area**: browser
+
+### Summary
+The CUA tab object did not expose the attempted accessibility-tree helper.
+
+### Error
+```text
+sourceAbout.getAccessibilityTree is not a function
+```
+
+### Context
+- Task attempted: Capture several reference-page templates in one browser run.
+- Command/tool/API: in-app Browser CUA tab method.
+- Inputs: About, blog, and resource pages.
+
+### Suspected Cause
+The persistent CUA API exposes its accessibility snapshot automatically when a tab is opened or navigated, rather than as a tab method.
+
+### Suggested Fix
+Open each required reference tab directly and use the returned accessibility snapshot; avoid undocumented tab helpers.
+
+### Metadata
+- Reproducible: yes
+- Related files: design-qa.md
+- Tags: browser, api, reference-capture
+
+## [ERR-20260913-014] readonly-content-cards-type-mismatch
+
+**Logged**: 2026-09-13T20:03:00+08:00
+**Priority**: low
+**Status**: resolved
+**Area**: build
+
+### Summary
+Static page data inferred as readonly could not be supplied to a component expecting a mutable array.
+
+### Error
+```text
+Type 'readonly [...]' is not assignable to type 'Card[]'
+```
+
+### Context
+- Task attempted: Type-check new company-information route templates.
+- Command/tool/API: `pnpm typecheck`.
+- Inputs: `app/about/[section]/page.tsx` page records.
+
+### Suspected Cause
+The page registry uses `as const`, while the component prop accepted only mutable card arrays.
+
+### Suggested Fix
+Accept `readonly Card[]` in the presentational component prop.
+
+### Metadata
+- Reproducible: yes
+- Related files: components/editorial-page.tsx
+- Tags: typescript, build, readonly
+
+## [ERR-20260913-015] cua-tab-evaluate-method-unavailable
+
+**Logged**: 2026-09-13T20:08:00+08:00
+**Priority**: low
+**Status**: resolved
+**Area**: browser
+
+### Summary
+The persistent CUA tab object did not expose an `evaluate` method for direct viewport diagnostics.
+
+### Error
+```text
+localCareers.evaluate is not a function
+```
+
+### Context
+- Task attempted: Verify mobile width and overflow on a new page template.
+- Command/tool/API: in-app Browser CUA tab method.
+- Inputs: Local careers page at 390px viewport.
+
+### Suspected Cause
+Evaluation is supported on locators rather than the tab object in this CUA runtime.
+
+### Suggested Fix
+Use supported locator-level evaluation or visual snapshots after changing the viewport.
+
+### Metadata
+- Reproducible: yes
+- Related files: app/globals.css
+- Tags: browser, api, responsive-qa
+
+## [ERR-20260913-016] cua-tab-locator-method-unavailable
+
+**Logged**: 2026-09-13T20:09:00+08:00
+**Priority**: low
+**Status**: resolved
+**Area**: browser
+
+### Summary
+The tab handle returned by browser-tab creation does not provide locator methods in this session.
+
+### Error
+```text
+localCareers.locator is not a function
+```
+
+### Context
+- Task attempted: Follow up with a locator-level mobile width check.
+- Command/tool/API: in-app Browser CUA tab method.
+- Inputs: Local careers page.
+
+### Suspected Cause
+The browser-tab creation handle is not the interaction handle documented for locator operations.
+
+### Suggested Fix
+Acquire the active tab with `cua.getTab` before using locators.
+
+### Metadata
+- Reproducible: yes
+- Related files: app/globals.css
+- Tags: browser, api, responsive-qa
+
+## [ERR-20260913-017] cua-tab-role-locator-unavailable
+
+**Logged**: 2026-09-13T20:10:00+08:00
+**Priority**: low
+**Status**: resolved
+**Area**: browser
+
+### Summary
+The tab handle acquired through `getTab` also does not expose role locator helpers in this CUA session.
+
+### Error
+```text
+careersQa.getByRole is not a function
+```
+
+### Context
+- Task attempted: Test the mobile navigation interaction.
+- Command/tool/API: in-app Browser CUA tab method.
+- Inputs: Local careers page after selecting the 390px viewport.
+
+### Suspected Cause
+This CUA plugin version presents the accessibility tree but does not expose programmatic locators on the tab handle.
+
+### Suggested Fix
+Use browser screenshots and accessibility snapshots for this verification run; do not call unadvertised locator helpers.
+
+### Metadata
+- Reproducible: yes
+- Related files: components/site-header.tsx
+- Tags: browser, api, interaction-qa
+
+## [ERR-20260913-018] zsh-status-variable-is-readonly
+
+**Logged**: 2026-09-13T20:16:00+08:00
+**Priority**: low
+**Status**: resolved
+**Area**: tests
+
+### Summary
+The post-build route sweep stopped because `status` is a read-only Zsh special parameter.
+
+### Error
+```text
+zsh: read-only variable: status
+```
+
+### Context
+- Task attempted: Check representative canonical and legacy route responses after a successful build.
+- Command/tool/API: shell loop using `curl`.
+- Inputs: local page paths.
+
+### Suspected Cause
+The loop assigned HTTP results to the shell-reserved `status` name.
+
+### Suggested Fix
+Use a task-specific variable such as `http_code`.
+
+### Metadata
+- Reproducible: yes
+- Related files: app/[...legacy]/page.tsx
+- Tags: shell, qa, zsh
