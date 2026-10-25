@@ -1,10 +1,105 @@
 import Link from "next/link";
 import Image from "next/image";
 import {options,type Product} from "@/lib/catalogue";
-import {TaxonomyBar,ProductGallery,AttachmentButton} from "./site-widgets";
+import {TaxonomyBar,ProductGallery} from "./site-widgets";
 import {IndustryIcons,SidebarPromos,EditorialCards} from "./site-blocks";
 import {Icon} from "./site-icon";
-const features=["Select a housing size and flange arrangement to suit the installation.","Compare housing materials for the bulk material being handled.","Review rotor clearances and machining requirements with the engineering team.","Consider bearing location and service access during the selection process.","Specify the pressure difference above and below the valve.","Check process temperature and the properties of the material.","Match the rotor and drive package to the required feed rate."];
-const configurations=["Cast iron or stainless steel housing configurations.","Surface finishes for the selected material and cleaning process.","Rotor styles for different particle sizes and flow characteristics.","Closed-end, open-end, metering and pocket rotor options.","Application-specific rotor tip and wear component choices.","Shaft seal arrangements suited to the operating conditions.","Valve housing vent connections.","Shaft seal and rotor pocket air purge options.","Drive and speed-control configurations.","Accessories for inlet, outlet and maintenance access."];
-function ArrowList({items}:{items:string[]}){return <ul className="arrow-list">{items.map(item=><li key={item}><Icon name="right"/><span>{item}</span></li>)}</ul>;}
-export function ProductDetail({product}:{product:Product}){return <><TaxonomyBar/><div className="shell"><section className="detail-hero"><ProductGallery product={product}/><div className="detail-copy"><h1>{product.name}</h1><h2>Rotary Valve for Metering, Feeding and Airlock Applications</h2><p>{product.summary}</p><div className="actions"><Link className="button" href="/quote">Get a quote <Icon name="right"/></Link><a className="text-link" href="#customizations">SEE CUSTOMIZATIONS <Icon name="down"/></a></div><div className="detail-downloads"><span>DOWNLOADS</span><div className="download-links">{[["Datasheet","document"],["Brochure","brochure"],["Technical Drawing","drawing"]].map(([label,icon])=><AttachmentButton key={label} name={label}><Icon name={icon}/>{label}</AttachmentButton>)}</div></div></div></section><div className="detail-columns"><div><section className="detail-panel"><div className="feature-columns"><div><h2>Features & Benefits:</h2><ArrowList items={features}/></div><div><h2>Options:</h2><ArrowList items={configurations}/></div></div><div className="table-wrap"><table className="capacity-table"><caption>Rotary Valve Capacity</caption><thead><tr><th scope="col">Valve size</th>{["1","5","8","10","12","14","16","18","20","22"].map(s=><th scope="col" key={s}>{s} RPM</th>)}</tr></thead><tbody>{["6","8","10","12","14","16","18","22","24","26"].map(size=><tr key={size}><th scope="row">{size}</th>{Array.from({length:10},(_,i)=><td key={i}>—</td>)}</tr>)}</tbody></table></div><p className="capacity-note">Capacity data is not configured in this preview. Final dimensions, ratings and values require engineering approval.</p></section><section className="customizations" id="customizations"><h2>Customizations: {product.name}</h2>{["Rotors","Kits","Accessories"].map(category=><div key={category}><h3>{category}</h3><div className="product-grid">{options.filter(o=>o.category===category).map(o=><Link className="product-card" href={`/options/${o.slug}`} key={o.slug}><div className="product-image"><Image src={o.image} alt={o.name} fill sizes="(max-width:800px) 45vw,12vw"/></div><h3>{o.name}</h3></Link>)}</div></div>)}</section></div><aside><section className="spec-box"><h2>Specifications</h2><dl className="spec-grid">{product.specifications.map(s=><div key={s.label}><dt>{s.label}</dt><dd>{s.value}</dd></div>)}</dl></section><h2 className="side-heading">Industries</h2><IndustryIcons/><h2 className="side-heading">Systems</h2><div className="industry-icons">{[["Bulk Material","bulk"],["Dust Collector","dust"],["Pneumatic Conveying","conveying"]].map(([name,icon])=><Link href={`/products?system=${encodeURIComponent(name)}`} key={name}><Icon name={icon}/>{name}</Link>)}</div><SidebarPromos/></aside></div><section className="section"><h2>Blogs & Videos</h2><EditorialCards/></section></div></>;}
+
+export function ProductDetail({product}:{product:Product}){
+ const capacity=product.capacity;
+ return <>
+  <TaxonomyBar/>
+  <div className="shell">
+   <section className="detail-hero">
+    <ProductGallery product={product}/>
+    <div className="detail-copy">
+     <h1>{product.name}</h1>
+     <h2>Technical information and configurations</h2>
+     <p>{product.summary}</p>
+     <div className="actions">
+      <Link className="button" href="/quote">Get a quote <Icon name="right"/></Link>
+      <a className="text-link" href="#customizations">SEE CUSTOMIZATIONS <Icon name="down"/></a>
+     </div>
+     <div className="detail-downloads">
+      <span>PRODUCT DOCUMENTS</span>
+      <div className="download-links">
+       {([["Datasheet","document"],["Brochure","brochure"],["Technical Drawing","drawing"]] as const).map(([label,icon])=>
+        <Link href="/contact" key={label}><Icon name={icon}/>Request {label}</Link>
+       )}
+      </div>
+     </div>
+    </div>
+   </section>
+   <div className="detail-columns">
+    <div>
+     <section className="detail-panel product-capacity">
+      <div className="product-capacity-heading">
+       <h2>Capacity data</h2>
+       <p>Compare the published figures for this model before confirming a valve size.</p>
+      </div>
+      {capacity?
+       <>
+       {capacity.speedsRpm?<p className="capacity-scroll-hint">Scroll the table sideways to view all rotor speeds.</p>:null}
+       <div className="table-wrap" role="region" aria-label={`${product.name} capacity table`} tabIndex={0}>
+        <table className="capacity-table">
+         <caption>{capacity.label} ({capacity.unit})</caption>
+         <thead>
+          <tr>
+           <th scope="col">Valve size (in.)</th>
+           {capacity.speedsRpm?.map(speed=><th scope="col" key={speed}>{speed} RPM</th>)??<th scope="col">Capacity ({capacity.unit})</th>}
+          </tr>
+         </thead>
+         <tbody>
+          {capacity.rows.map(row=><tr key={row.size}>
+           <th scope="row">{row.size}</th>
+           {row.values.map((value,index)=><td key={index}>{value}</td>)}
+          </tr>)}
+         </tbody>
+        </table>
+       </div>
+       </>:
+       <div className="capacity-unlisted">
+        <h3>Capacity by application</h3>
+        <p>There is no published capacity table for this model. Share the material, target throughput and operating conditions for sizing.</p>
+        <Link href="/quote">Discuss your requirements <Icon name="right"/></Link>
+       </div>
+      }
+      <p className="capacity-note">Values and ratings depend on the selected configuration. Confirm final sizing and operating limits with the engineering team.</p>
+     </section>
+     <section className="customizations" id="customizations">
+      <h2>Customizations: {product.name}</h2>
+      {["Rotors","Kits","Accessories"].map(category=><div key={category}>
+       <h3>{category}</h3>
+       <div className="product-grid">
+        {options.filter(option=>option.category===category).map(option=>
+         <Link className="product-card" href={`/options/${option.slug}`} key={option.slug}>
+          <div className="product-image"><Image src={option.image} alt={option.name} fill sizes="(max-width:800px) 45vw,12vw"/></div>
+          <h3>{option.name}</h3>
+         </Link>
+        )}
+       </div>
+      </div>)}
+     </section>
+    </div>
+    <aside>
+     <section className="spec-box">
+      <h2>Specifications</h2>
+      <dl className="spec-grid">
+       {product.specifications.map(spec=><div key={spec.label}><dt>{spec.label}</dt><dd>{spec.value}</dd></div>)}
+      </dl>
+     </section>
+     <h2 className="side-heading">Industries</h2>
+     <IndustryIcons/>
+     <h2 className="side-heading">Systems</h2>
+     <div className="industry-icons">
+      {([["Bulk Material","bulk"],["Dust Collector","dust"],["Pneumatic Conveying","conveying"]] as const).map(([name,icon])=>
+       <Link href={`/products?system=${encodeURIComponent(name)}`} key={name}><Icon name={icon}/>{name}</Link>
+      )}
+     </div>
+     <SidebarPromos/>
+    </aside>
+   </div>
+   <section className="section"><h2>Blogs & Videos</h2><EditorialCards/></section>
+  </div>
+ </>;
+}

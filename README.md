@@ -1,54 +1,40 @@
-# Dongxin Machinery — local layout preview
+# Dongxin Machinery website
 
-English Next.js App Router site, prepared for a future GitHub repository and Vercel deployment. No repository has been pushed and no production deployment has been made.
+Next.js App Router website and Chinese-language operations dashboard for qzdxrv.com.
 
-## Current status
-
-This is a working, source-observed layout implementation, **not a completed all-page 1:1 reproduction**. There are 79 canonical pages in the local sitemap: 26 products, 21 options, 6 industries, 6 sample articles, and supporting pages. The reference site's complete article archive and every interaction state have not been migrated or compared.
-
-Some English paragraphs are generic preview copy, NOT a verbatim migration of the reference copy. Product specifications and category assignments are placeholders requiring review. This does not yet satisfy the requested unchanged-copy requirement. Brand-specific history, personnel, certifications and contact information have intentionally not been adopted as this company's claims.
-
-## Run
+## Local development
 
 ```sh
 pnpm install
 pnpm dev
+pnpm typecheck
+pnpm build
 ```
 
-Local preview: http://localhost:3000
+Set the values described in `.env.example` in a local `.env.local` file. Never commit live credentials. The public website can render without the operations backend; analytics and inquiry submission require Supabase configuration.
+
+## Main areas
+
+- `app/`: public pages, metadata, sitemap, robots, API routes and administration routes.
+- `components/site-header.tsx`, `site-footer.tsx`, `app/globals.css`: shared public navigation, responsive layout and styling.
+- `lib/catalogue.ts` and `lib/product-technical-data.ts`: published product, industry, option and article data. These files are the current source of truth for the read-only content views in the dashboard.
+- `lib/analytics.ts`, `components/analytics-tracker.tsx`, `app/api/analytics/event/route.ts`: anonymous visit, page-duration and WhatsApp-click collection.
+- `app/api/inquiries/route.ts`: contact and quote submissions stored in Supabase. Email addresses displayed on the site are for direct contact; form submission does not send email.
+- `app/admin/`: protected dashboard with date filters, paginated inquiries and visitor records, visit detail, and read-only content lists.
+- `supabase/migrations/`: operations database schema and access grants.
+
+The gallery contains product images, not interactive 3D files. Video, technical-document and career content is shown as unavailable or directs visitors to the team when an approved asset is not published. Do not present an unavailable file as a download.
+
+## Verification
 
 ```sh
 pnpm typecheck
 pnpm build
-node scripts/check-local.mjs
+node scripts/audit-public-site.mjs https://qzdxrv.com
 ```
 
-The route check requires a running dev server. It tests HTTP status and page headings, not visual fidelity.
+The site audit checks sitemap pages, page metadata, headings and internal link status. Browser inspection is still required for interaction and responsive visual checks. See `docs/audit-2026-10-24.md` for the latest audit record.
 
-## Where to edit
+## Deployment
 
-- `lib/catalogue.ts`: brand name, product names, product images, industry data, options, article entries.
-- `public/media/`: local images and font files.
-- `components/site-header.tsx` and `site-footer.tsx`: shared navigation.
-- `app/globals.css` and `app/tools.css`: responsive layout and shared styling.
-- `components/quote-form.tsx`: quote fields and local validation.
-- `app/`: page templates and canonical routes.
-- `reference-layout.md`: capture evidence and known source gaps.
-- `design-qa.md`: checks performed and outstanding fidelity issues.
-- `asset-notes.md`: temporary media, provenance and generated hero prompt.
-
-## Preview behavior
-
-Search, filters, sorting, mobile navigation, submenus, tabs, accordions, modal placeholders and local form validation work. Quote/contact/newsletter forms do not transmit or store information. Downloads and 3D models show explicit placeholders. The sizing flow demonstrates volume calculation; it does not select or certify an engineering configuration.
-
-## Media and branding
-
-A new text wordmark is centralized in the catalogue configuration. Images with observed original manufacturer marks and certification badges were removed from the public directory. Some product slots deliberately reuse unmarked placeholder renders. These pictures are not a verified inventory of Dongxin products.
-
-The homepage and About hero use a generated industrial illustration, not an actual company facility photograph. The open-source Montserrat font substitutes for the reference's commercial typeface. Replace reference imagery and verify its use rights before publishing.
-
-## GitHub and Vercel preparation
-
-Push to a repository you control, then import that repository into Vercel with the Next.js framework preset. Set `NEXT_PUBLIC_SITE_URL` to the production HTTPS domain for metadata and sitemap generation. The current fallback is example.com.
-
-Before launch: approve copy and specifications; replace images; supply real contact details, documents and models; connect form handling; complete the privacy policy; verify content rights; finish whole-site desktop/mobile visual QA.
+The repository is connected to Vercel; production runs at https://qzdxrv.com. Deploy a tested build, verify it, and promote it to the production domain. Supabase operations data is stored in the dedicated project configured through server-side environment variables.

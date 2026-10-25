@@ -5,5 +5,8 @@ out/
 .vercel/
 *.log
 *.tsbuildinfo
+.playwright-cli/
 .env*
 !.env.example
+.DS_Store
+deliverables/

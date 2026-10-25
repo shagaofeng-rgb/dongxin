@@ -1,4 +1,65 @@
 import Link from "next/link";
 import {brand,industries} from "@/lib/catalogue";
 import {CONTACT_ADDRESS,CONTACT_EMAIL,CONTACT_PHONE,CONTACT_PHONE_DISPLAY} from "@/lib/contact";
-export function SiteFooter(){return <footer className="site-footer"><div className="footer-grid"><div className="footer-contact"><strong>{brand.name}</strong><p>Rotary valves. Material handling.<br/>Application support.</p><p className="footer-address"><b>Address:</b> {CONTACT_ADDRESS}</p><a href={`tel:${CONTACT_PHONE}`}><b>Tel:</b> {CONTACT_PHONE_DISPLAY}</a><a href={`mailto:${CONTACT_EMAIL}`}><b>Email:</b> {CONTACT_EMAIL}</a><Link href="/contact">Contact our team</Link><p className="footer-copyright">© {new Date().getFullYear()} {brand.name}.<br/>All rights reserved.</p></div><div><Link className="footer-heading" href="/products">Our Valves</Link>{industries.map(i=><Link key={i.slug} href={`/solutions/${i.slug}`}>{i.name}</Link>)}<Link className="footer-heading" href="/about">About Us</Link><Link className="footer-heading" href="/models">3D Gallery</Link></div><div><Link className="footer-heading" href="/blog">Blog & News</Link><Link href="/blog">All Blogs</Link><Link href="/blog?category=Events">Events</Link><Link className="footer-heading" href="/resources">Videos & Resources</Link><Link href="/resources/videos">Videos</Link><Link href="/resources/downloads">Downloads</Link><Link href="/resources/technical-drawings">Technical Drawings</Link><Link href="/sizing">Valve Sizing Tool</Link><Link href="/resources/glossary">Glossary</Link></div><div><strong className="footer-heading">Other Links</strong><Link href="/support">Technical Support</Link><Link href="/compliance">Safety & Compliance</Link><Link href="/careers">Careers</Link><Link href="/contact/representatives">Locate a Rep</Link><Link href="/quote">Request a Quote</Link><Link href="/privacy">Privacy Policy</Link><strong className="footer-heading">More than valves</strong><Link href="/options?category=Conveying%20Equipment">Conveying Equipment</Link></div></div></footer>;}
+import {Icon} from "./site-icon";
+
+const productLinks=[
+ {label:"All valves",href:"/products"},
+ {label:"Rotary valve options",href:"/options"},
+ {label:"Valve sizing tool",href:"/sizing"}
+];
+const companyLinks=[
+ {label:"About us",href:"/about"},
+ {label:"Blog and news",href:"/blog"},
+ {label:"Technical support",href:"/support"},
+ {label:"Glossary",href:"/resources/glossary"},
+ {label:"Contact us",href:"/contact"}
+];
+
+function FooterGroup({title,links}:{title:string;links:{label:string;href:string}[]}){
+ const items=links.map(link=><Link href={link.href} key={link.href}>{link.label}</Link>);
+ return <>
+  <div className="footer-group footer-group-desktop">
+   <h3>{title}</h3>
+   <nav className="footer-link-list" aria-label={title}>{items}</nav>
+  </div>
+  <details className="footer-group footer-group-mobile">
+   <summary>{title}</summary>
+   <nav className="footer-link-list" aria-label={title}>{items}</nav>
+  </details>
+ </>;
+}
+
+export function SiteFooter(){
+ return <footer className="site-footer">
+  <div className="footer-cta">
+   <div className="footer-inner footer-cta-inner">
+    <div>
+     <h2>Need help choosing a valve?</h2>
+     <p>Tell us about your material, capacity and operating conditions.</p>
+    </div>
+    <Link className="footer-cta-button" href="/quote">Request a quote <Icon name="right"/></Link>
+   </div>
+  </div>
+  <div className="footer-inner footer-main">
+   <div className="footer-contact">
+    <Link className="footer-brand" href="/">{brand.name}</Link>
+    <p>Rotary valves and material handling equipment.</p>
+    <address>
+     <div><span>Address</span><span>{CONTACT_ADDRESS}</span></div>
+     <div><span>Phone</span><a href={`tel:${CONTACT_PHONE}`}>{CONTACT_PHONE_DISPLAY}</a></div>
+     <div><span>Email</span><a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></div>
+    </address>
+   </div>
+   <div className="footer-groups">
+    <FooterGroup title="Products" links={productLinks}/>
+    <FooterGroup title="Applications" links={industries.map(industry=>({label:industry.name,href:`/solutions/${industry.slug}`}))}/>
+    <FooterGroup title="Company & support" links={companyLinks}/>
+   </div>
+  </div>
+  <div className="footer-inner footer-bottom">
+   <span>© {new Date().getFullYear()} {brand.name}. All rights reserved.</span>
+   <Link href="/privacy">Privacy policy</Link>
+  </div>
+ </footer>;
+}

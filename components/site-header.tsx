@@ -48,7 +48,7 @@ const navigation:NavItem[]=[
   groups:[
    {title:"By Industry",links:industryLinks},
    {title:"By System",links:systemLinks},
-   {title:"By Type",links:[{label:"Airlock with Metering",href:"/products"},{label:"Metering and Feeding",href:"/products"},{label:"Rotary Airlock",href:"/products"}]},
+   {title:"By Type",links:[{label:"Rotary Airlock",href:"/products?type=Rotary%20Airlock"},{label:"Dust Collector",href:"/products?type=Dust%20Collector"},{label:"Diverter",href:"/products?type=Diverter"}]},
   ],
   featuredTitle:"Featured Valves",
   featured:[
@@ -62,8 +62,8 @@ const navigation:NavItem[]=[
   groups:[{title:"Types of Rotary Valve Options",links:[{label:"Rotors",href:"/options?category=Rotors"},{label:"Kits",href:"/options?category=Kits"},{label:"Accessories",href:"/options?category=Accessories"},{label:"Conveying Equipment",href:"/options?category=Conveying%20Equipment"}]}],
   actions:[
    {title:"Your rotary valve accessory guide",kicker:"Blog",href:"/blog/which-parts-of-a-rotary-valve-are-customizable",action:"Read the blog",icon:"document"},
-   {title:"A guide to all types of rotors",kicker:"PDF",href:"/resources/downloads",action:"Download the guide",icon:"downloadAlt"},
-   {title:"How material flows through a rotor",kicker:"Video",href:"/resources/videos",action:"Watch now",icon:"play"},
+   {title:"Explore rotor styles",kicker:"Options",href:"/options",action:"Browse options",icon:"downloadAlt"},
+   {title:"How material flows through a rotor",kicker:"Resources",href:"/resources",action:"Browse resources",icon:"document"},
   ],
   featuredTitle:"Featured Options",
   featured:[
@@ -72,14 +72,14 @@ const navigation:NavItem[]=[
   ],
  },
  {
-  key:"models",label:"View in 3D",href:"/models",layout:"wide",mobileDirect:true,
-  intro:{title:"View valves in our 3D gallery",action:"Visit the 3D gallery",icon:"model"},
-  featuredTitle:"Popular 3D Models",
+  key:"models",label:"Product Gallery",href:"/models",layout:"wide",mobileDirect:true,
+  intro:{title:"Browse valve images",action:"Visit the product gallery",icon:"model"},
+  featuredTitle:"Featured Products",
   featured:[
-   {title:"MD Series with Quick-Clean",href:"/models",action:"View in 3D",image:"/media/valve-05.webp"},
-   {title:"CI Series",href:"/models",action:"View in 3D",image:"/media/valve-02.webp"},
-   {title:"XTR-CI Series",href:"/models",action:"View in 3D",image:"/media/valve-06.webp"},
-   {title:"BT Series",href:"/models",action:"View in 3D",image:"/media/valve-14.webp"},
+   {title:"MD Series with Quick-Clean",href:"/products/md-series-with-quick-clean",action:"View product",image:"/media/valve-05.webp"},
+   {title:"CI Series",href:"/products/airlock-ci-series",action:"View product",image:"/media/valve-02.webp"},
+   {title:"XTR-CI Series",href:"/products/xtr-ci-series",action:"View product",image:"/media/valve-06.webp"},
+   {title:"BT Series",href:"/products/bt-series",action:"View product",image:"/media/valve-14.webp"},
   ],
  },
  {
@@ -92,8 +92,8 @@ const navigation:NavItem[]=[
    {title:"First-rate talent here to help you",kicker:"The People",href:"/about#people",action:"Meet our people",icon:"sizing"},
    {title:"Equipped to build high-quality valves",kicker:"The Facilities",href:"/about#facilities",action:"See where we work",icon:"support"},
   ],
-  featuredTitle:"Featured Video",
-  featured:[{title:"Inside Dongxin valve production",href:"/resources/videos",action:"Watch now",image:"/media/workshop-hero.png",video:true}],
+  featuredTitle:"Company Information",
+  featured:[{title:"Learn about Dongxin",href:"/about",action:"Read more",image:"/media/workshop-hero.png"}],
  },
  {
   key:"resources",label:"Resources",href:"/resources",
@@ -103,14 +103,14 @@ const navigation:NavItem[]=[
    {title:"Glossary",links:[{label:"All Terms",href:"/resources/glossary"},{label:"Valves",href:"/resources/glossary"},{label:"Parts",href:"/resources/glossary"},{label:"Materials",href:"/resources/glossary"}]},
   ],
   actions:[
-   {title:"Visit our full video library",href:"/resources/videos",action:"Start watching",icon:"play"},
+   {title:"Browse technical resources",href:"/resources",action:"View resources",icon:"document"},
    {title:"Size your valve in 3 easy steps",href:"/sizing",action:"Try the sizing tool",icon:"sizing"},
    {title:"Technical answers for your application",href:"/support",action:"View support resources",icon:"support"},
   ],
-  featuredTitle:"Featured Videos",
+  featuredTitle:"Featured Resources",
   featured:[
-   {title:"Explore rotary valve components",href:"/resources/videos",action:"Watch now",image:"/media/rotor-01.webp",video:true},
-   {title:"Quick-clean valve walkthrough",href:"/resources/videos",action:"Watch now",image:"/media/valve-05.webp",video:true},
+   {title:"Explore rotary valve components",href:"/resources/glossary",action:"Read glossary",image:"/media/rotor-01.webp"},
+   {title:"Quick-clean valve configurations",href:"/products/md-series-with-quick-clean",action:"View product",image:"/media/valve-05.webp"},
   ],
  },
  {
@@ -138,8 +138,8 @@ const navigation:NavItem[]=[
    {title:"How is a high quality valve made?",href:"/blog",action:"Read the blog",icon:"question"},
    {title:"Our most common questions, answered",href:"/support?category=FAQs",action:"Browse FAQs",icon:"support"},
   ],
-  featuredTitle:"Featured Video",
-  featured:[{title:"A valve configured to fit",href:"/resources/videos",action:"Watch now",image:"/media/valve-19.webp",video:true}],
+  featuredTitle:"Featured Support",
+  featured:[{title:"Find the right configuration",href:"/support",action:"Browse support",image:"/media/valve-19.webp"}],
  },
 ];
 
@@ -182,6 +182,7 @@ export function SiteHeader(){
  const headerRef=useRef<HTMLElement>(null);
  useEffect(()=>{const onScroll=()=>setCompact(window.scrollY>90);onScroll();window.addEventListener("scroll",onScroll,{passive:true});return()=>window.removeEventListener("scroll",onScroll);},[]);
  useEffect(()=>{document.documentElement.classList.toggle("high-contrast",contrast);return()=>document.documentElement.classList.remove("high-contrast");},[contrast]);
+ useEffect(()=>{document.body.classList.toggle("mobile-menu-open",menu);return()=>document.body.classList.remove("mobile-menu-open");},[menu]);
  useEffect(()=>{setMenu(false);setSearch(false);setSubmenu(null);},[path]);
  useEffect(()=>{const closeOutside=(event:PointerEvent)=>{if(headerRef.current&&!headerRef.current.contains(event.target as Node))close();};document.addEventListener("pointerdown",closeOutside);return()=>document.removeEventListener("pointerdown",closeOutside);},[]);
  function close(){setMenu(false);setSearch(false);setSubmenu(null);}
@@ -193,6 +194,6 @@ export function SiteHeader(){
   <nav className="utility-nav" aria-label="Site tools"><button aria-label="Toggle high contrast" aria-pressed={contrast} onClick={()=>setContrast(!contrast)}><Icon name="contrast"/></button><Link href="/contact/representatives" onClick={close}>Locate a Rep</Link><Link href="/quote" onClick={close}>Request a Quote</Link><Link href="/contact" onClick={close}>Contact Us</Link><Link className="utility-contact" href="/contact" onClick={close}><Icon name="phone"/> TALK TO OUR TEAM</Link></nav>
   <div className="header-actions"><Link className="mobile-contact" href="/contact" aria-label="Contact our team" onClick={close}><Icon name="phone"/></Link><button className="search-toggle" aria-label="Open search" aria-expanded={search} aria-controls="header-search" onClick={()=>{setSearch(!search);setMenu(false);setSubmenu(null);}}><Icon name={search?"close":"search"}/></button><button className="menu-toggle" aria-label={menu?"Close navigation":"Open navigation"} aria-expanded={menu} aria-controls="main-navigation" onClick={()=>{setMenu(!menu);setSearch(false);setSubmenu(null);}}><Icon name={menu?"close":"menu"}/></button></div>
   <nav id="main-navigation" className={`primary-nav ${menu?"is-open":""}`} aria-label="Main navigation">{navigation.map(item=><div className={`nav-item nav-item-${item.key} ${submenu===item.key?"submenu-open":""} ${item.mobileDirect?"nav-item-mobile-direct":""}`} key={item.key} onMouseEnter={()=>{if(!item.mobileDirect)openDesktopSubmenu(item.key);}} onMouseLeave={closeDesktopSubmenu} onFocusCapture={()=>{if(!item.mobileDirect)openDesktopSubmenu(item.key);}} onBlurCapture={event=>{if(!item.mobileDirect&&isDesktop()&&!event.currentTarget.contains(event.relatedTarget as Node))setSubmenu(null);}}><Link href={item.href} onClick={close} className={path.startsWith(item.href)?"active":""} aria-haspopup={item.mobileDirect?undefined:"menu"} aria-expanded={item.mobileDirect?undefined:submenu===item.key}><span className="nav-label">{item.label}</span></Link>{!item.mobileDirect?<button className="nav-submenu-toggle" aria-label={`Toggle ${item.label} submenu`} aria-expanded={submenu===item.key} aria-controls={`submenu-${item.key}`} onClick={()=>setSubmenu(submenu===item.key?null:item.key)}><Icon name="down"/></button>:null}{!item.mobileDirect?<div className="nav-dropdown" id={`submenu-${item.key}`}><MegaMenu item={item} close={close}/></div>:null}</div>)}</nav>
-  {search?<form id="header-search" className="header-search" action="/products" onSubmit={close}><label className="sr-only" htmlFor="global-search">Search the product catalogue</label><input id="global-search" name="q" type="search" placeholder="Search valves, options and resources" autoFocus/><button className="button" type="submit"><Icon name="search"/> Search</button></form>:null}
+  {search?<form id="header-search" className="header-search" action="/products" onSubmit={close}><label className="sr-only" htmlFor="global-search">Search the product catalogue</label><input id="global-search" name="q" type="search" placeholder="Search valves by name or application" autoFocus/><button className="button" type="submit"><Icon name="search"/> Search</button></form>:null}
  </header></>;
 }

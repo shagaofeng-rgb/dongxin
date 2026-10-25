@@ -1,0 +1,6 @@
+.admin-app{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Segoe UI",Arial,sans-serif}
+.admin-app .admin-page-header h1,.admin-app .admin-panel-heading h2{letter-spacing:0}
+.admin-app .admin-page-header p,.admin-app .admin-panel-heading p,.admin-app .admin-metric p,.admin-app .admin-table-wrap th{letter-spacing:.03em;text-transform:none}
+.admin-app .admin-brand small{letter-spacing:.04em;text-transform:none}
+.admin-auth-story h1,.admin-auth-heading h2{letter-spacing:0}
+.admin-auth-visual-footer,.admin-auth-panel-top,.admin-auth-panel-foot{letter-spacing:.04em}
